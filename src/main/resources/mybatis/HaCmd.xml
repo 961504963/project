@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.test.mapper.HaCmdMapper">
+
+    <resultMap id="HaCmdMap" type="HaCmd">
+        <result property="id" column="id" />
+        <result property="cmd" column="cmd" />
+        <result property="parms" column="parms" />
+        <result property="centorid" column="centorid" />
+        <result property="uid" column="uid" />
+        <result property="createtime" column="createtime" />
+        <result property="state" column="state" />
+        <result property="tryTimes" column="tryTimes" />
+        <result property="lastEndTime" column="lastEndTime" />
+        <result property="lastBeginTime" column="lastBeginTime" />
+        <result property="processing" column="processing" />
+        <result property="inter_cmdid" column="inter_cmdid" />
+        <association property="haCentor" javaType="HaCentor">
+            <id property="id" column="id2" />
+            <result property="addr" column="addr" />
+        </association>
+    </resultMap>
+    
+    <select id="HaCmdList" resultMap="HaCmdMap">
+        SELECT
+		cmd,parms,c.ADDR,ha_cmd.state,ha_cmd.processing,lastBeginTime,ha_cmd.lastEndTime,ha_cmd.tryTimes,ha_cmd.inter_cmdid
+		FROM ha_cmd,HA_CENTOR c WHERE ha_cmd.centorid = c.id
+		LIMIT #{pageSize} offset #{pageNo}
+    </select>
+
+    <select id="queryHaCmdCount" resultType="_int">
+         SELECT count(1) FROM ha_cmd
+    </select>
+
+</mapper>
